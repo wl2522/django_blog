@@ -15,11 +15,13 @@ def post_detail(request, pk):
 @login_required
 def post_new(request):
     if request.method == "POST":
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         
         if form.is_valid():
+            post = Post(image=request.FILES['image'])
             post = form.save(commit=False)
             post.author = request.user
+
             post.save()
         
             return redirect('post_detail', pk=post.pk)
@@ -95,4 +97,10 @@ def comment_remove(request, pk):
     comment.delete()
     
     return redirect('post_detail', pk=comment.post.pk)
+
+@login_required
+def upload_file(image):
+    with open('blog/media', 'wb+') as destination:
+        for chunk in image.chunks():
+            destination.write(chunk)
     
