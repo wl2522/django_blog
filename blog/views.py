@@ -38,7 +38,7 @@ def post_edit(request, pk):
         form = PostForm(request.POST, request.FILES, instance=post)
         
         if form.is_valid():
-            post = Post(image=request.FILES['image'])
+            #post = Post(image=request.FILES['image'])
             post=form.save(commit=False)
             post.author = request.user
             post.save()
